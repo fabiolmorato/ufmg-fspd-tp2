@@ -23,7 +23,7 @@ def service_factory(service_class, stub, stub_grpc):
   code = '''
 class Generated{name}Service(stub_grpc.{name}Servicer):
   def __init__(self, base_service, stub, stub_grpc):
-    self.base_service = base_service
+    self.base_service = base_service()
     self.stub = stub
     self.stub_grpc = stub_grpc
 '''.format(name=service_class.__name__)

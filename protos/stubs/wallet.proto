@@ -3,6 +3,7 @@ syntax = "proto3";
 service Wallet {
   rpc Balance (BalanceParams) returns (BalanceReply) {}
   rpc PaymentOrder (PaymentOrderParams) returns (PaymentOrderReply) {}
+  rpc Transfer (TransferParams) returns (TransferReply) {}
   rpc Stop (StopParams) returns (StopReply) {}
 }
 
@@ -14,11 +15,6 @@ message BalanceReply {
   int64 balance = 1;
 }
 
-message StopParams {}
-message StopReply {
-  int64 accounts = 1;
-}
-
 message PaymentOrderParams {
   string identifier = 1;
   int64 value = 2;
@@ -27,4 +23,19 @@ message PaymentOrderParams {
 message PaymentOrderReply {
   int64 status = 1;
   bytes identifier = 2;
+}
+
+message TransferParams {
+  int64 value = 1;
+  bytes identifier = 2;
+  string account = 3;
+}
+
+message TransferReply {
+  int64 result = 1;
+}
+
+message StopParams {}
+message StopReply {
+  int64 accounts = 1;
 }

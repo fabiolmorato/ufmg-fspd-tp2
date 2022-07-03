@@ -46,6 +46,29 @@ class Wallet:
       "identifier": payment_order
     }
   
+  def Transfer(self, value, identifier, account):
+    if not account in self.accounts:
+      return {
+        "result": -1
+      }
+
+    if not identifier in self.payment_orders:
+      return {
+        "result": -2
+      }
+    
+    if value != self.payment_orders[identifier]:
+      return {
+        "result": -3
+      }
+
+    self.accounts[account] += value
+    del self.payment_orders[identifier]
+
+    return {
+      "result": self.accounts[account]
+    }
+  
   def Stop(self):
     self.__save_accounts()
     self.server.stop(10)

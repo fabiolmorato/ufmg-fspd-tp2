@@ -3,3 +3,4 @@ __pycache__
 */**/common
 stubs
 !protos/stubs
+contas.txt

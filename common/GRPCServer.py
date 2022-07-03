@@ -18,6 +18,9 @@ class GRPCServer:
     self.server.add_insecure_port(ip + ':' + str(port))
     self.server.start()
     self.server.wait_for_termination()
+  
+  def stop(self, grace=0):
+    self.server.stop(grace)
 
 def service_factory(service_class, stub, stub_grpc):
   code = '''
@@ -32,15 +35,17 @@ class Generated{name}Service(stub_grpc.{name}Servicer):
   return Class
 
 def method_factory(class_name, method_name):
-  code = '''
+  code = f'''
 def generated_{class_name}_{method_name}(self, request, context):
   request_params = {{ }}
   request_vars = [key for key in dir(request) if key[0].islower()]
   for var in request_vars:
     request_params[var] = getattr(request, var)
   response = self.base_service.{method_name}(**request_params)
+  if not type(response) == type({{}}):
+    response = {{}} 
   return self.stub.{method_name}Reply(**response)
-'''.format(class_name=class_name, method_name=method_name)
+'''
   exec(code)
   method = eval('generated_{class_name}_{method_name}'.format(class_name=class_name, method_name=method_name))
   return method

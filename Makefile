@@ -9,6 +9,9 @@ copy:
 	make __copy_stubs p=store-server
 	make __copy_stubs p=store-client
 	make __copy_common p=wallet-server
+	make __copy_common p=wallet-client
+	make __copy_common p=store-server
+	make __copy_common p=store-client
 
 __copy_stubs:
 	mkdir -p $(p)/src/stubs
@@ -24,6 +27,10 @@ clean:
 	rm -rf ./store-server/src/stubs
 	rm -rf ./store-client/src/stubs
 	rm -rf stubs
+	rm -rf ./wallet-server/common
+	rm -rf ./wallet-client/common
+	rm -rf ./store-server/common
+	rm -rf ./store-client/common
 
 run_serv_banco:
 	python3 wallet-server/src/main.py

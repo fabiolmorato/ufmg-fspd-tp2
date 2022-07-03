@@ -23,6 +23,9 @@ class Wallet:
     return {
       "balance": self.accounts[identifier]
     }
+  
+  def Stop(self):
+    server.stop(0)
 
 server = GRPCServer()
 server.register(Wallet, wallet_pb2, wallet_pb2_grpc)

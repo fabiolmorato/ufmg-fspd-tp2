@@ -2,6 +2,7 @@ syntax = "proto3";
 
 service Wallet {
   rpc Balance (BalanceParams) returns (BalanceReply) {}
+  rpc Stop (StopParams) returns (StopReply) {}
 }
 
 message BalanceParams {
@@ -11,3 +12,6 @@ message BalanceParams {
 message BalanceReply {
   int64 balance = 1;
 }
+
+message StopParams {}
+message StopReply {}

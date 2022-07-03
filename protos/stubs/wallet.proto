@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+service Wallet {
+  rpc Balance (BalanceParams) returns (BalanceReply) {}
+}
+
+message BalanceParams {
+  string identifier = 1;
+}
+
+message BalanceReply {
+  int64 balance = 1;
+}

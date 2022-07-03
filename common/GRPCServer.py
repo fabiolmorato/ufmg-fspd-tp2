@@ -6,13 +6,13 @@ class GRPCServer:
   def __init__(self, max_workers=10):
     self.server = grpc.server(futures.ThreadPoolExecutor(max_workers))
 
-  def register(self, service_class, stub, stub_grpc):
+  def register(self, service_class, stub, stub_grpc, service_class_args=()):
     Service = service_factory(service_class, stub, stub_grpc)
     methods_list = [method for method in dir(service_class) if method.startswith("__") is False]
     for method in methods_list:
       implementation = method_factory(service_class.__name__, method)
       setattr(Service, method, implementation)
-    stub_grpc.add_WalletServicer_to_server(Service(service_class, stub, stub_grpc), self.server)
+    stub_grpc.add_WalletServicer_to_server(Service(service_class, stub, stub_grpc, service_class_args), self.server)
   
   def listen(self, ip='0.0.0.0', port=3000):
     self.server.add_insecure_port(ip + ':' + str(port))
@@ -25,8 +25,8 @@ class GRPCServer:
 def service_factory(service_class, stub, stub_grpc):
   code = '''
 class Generated{name}Service(stub_grpc.{name}Servicer):
-  def __init__(self, base_service, stub, stub_grpc):
-    self.base_service = base_service()
+  def __init__(self, base_service, stub, stub_grpc, service_class_args):
+    self.base_service = base_service(*service_class_args)
     self.stub = stub
     self.stub_grpc = stub_grpc
 '''.format(name=service_class.__name__)

@@ -12,7 +12,7 @@ class GRPCServer:
     for method in methods_list:
       implementation = method_factory(service_class.__name__, method)
       setattr(Service, method, implementation)
-    stub_grpc.add_WalletServicer_to_server(Service(service_class, stub, stub_grpc, service_class_args), self.server)
+    exec(f'stub_grpc.add_{service_class.__name__}Servicer_to_server(Service(service_class, stub, stub_grpc, service_class_args), self.server)')
   
   def listen(self, ip='0.0.0.0', port=3000):
     self.server.add_insecure_port(ip + ':' + str(port))

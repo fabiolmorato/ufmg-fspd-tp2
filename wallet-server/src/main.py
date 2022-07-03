@@ -1,4 +1,5 @@
 import sys
+from secrets import token_bytes
 
 from common.GRPCServer import GRPCServer
 
@@ -8,6 +9,7 @@ import stubs.wallet_pb2_grpc as wallet_pb2_grpc
 class Wallet:
   def __init__(self, server, accounts_file):
     self.accounts = {}
+    self.payment_orders = {}
     self.accounts_file = accounts_file
     self.server = server
     self.__load_accounts()
@@ -20,6 +22,28 @@ class Wallet:
     
     return {
       "balance": self.accounts[identifier]
+    }
+
+  def PaymentOrder(self, identifier, value):
+    if not identifier in self.accounts:
+      return {
+        "status": -1,
+        "identifier": token_bytes(32)
+      }
+    
+    if value > self.accounts[identifier]:
+      return {
+        "status": -2,
+        "identifier": token_bytes(32)
+      }
+
+    self.accounts[identifier] -= value
+    payment_order = token_bytes(32)
+    self.payment_orders[payment_order] = value
+
+    return {
+      "status": 0,
+      "identifier": payment_order
     }
   
   def Stop(self):

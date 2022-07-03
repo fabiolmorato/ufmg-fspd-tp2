@@ -35,7 +35,7 @@ clean:
 run_serv_banco:
 	make clean > /dev/null
 	make stubs > /dev/null
-	python3 wallet-server/src/main.py
+	python3 wallet-server/src/main.py $(arg1) $(arg2)
 
 run_cli_banco:
 	make clean > /dev/null

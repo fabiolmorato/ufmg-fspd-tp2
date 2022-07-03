@@ -1,11 +1,15 @@
+import sys
+
 from common.GRPCServer import GRPCServer
 
 import stubs.wallet_pb2 as wallet_pb2
 import stubs.wallet_pb2_grpc as wallet_pb2_grpc
 
 class Wallet:
-  def __init__(self):
+  def __init__(self, server, accounts_file):
     self.accounts = {}
+    self.accounts_file = accounts_file
+    self.server = server
     self.__load_accounts()
 
   def Balance(self, identifier):
@@ -20,13 +24,13 @@ class Wallet:
   
   def Stop(self):
     self.__save_accounts()
-    server.stop(10)
+    self.server.stop(10)
     return {
       "accounts": len(self.accounts)
     }
 
   def __load_accounts(self):
-    file = open("contas.txt")
+    file = open(self.accounts_file)
     for line in file:
       if line == "":
         continue
@@ -34,10 +38,17 @@ class Wallet:
       self.accounts[data[0]] = int(data[1])
   
   def __save_accounts(self):
-    file = open("contas.txt", "w")
+    file = open(self.accounts_file, "w")
     for account in self.accounts:
       file.write(f"{account} {self.accounts[account]}\n")
 
-server = GRPCServer()
-server.register(Wallet, wallet_pb2, wallet_pb2_grpc)
-server.listen('0.0.0.0', '5505')
+def main(argv):
+  file = argv[1]
+  port = int(argv[2])
+
+  server = GRPCServer()
+  server.register(Wallet, wallet_pb2, wallet_pb2_grpc, (server, file))
+  server.listen('0.0.0.0', port)
+
+if __name__ == "__main__":
+  main(sys.argv)

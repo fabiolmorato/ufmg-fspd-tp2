@@ -5,6 +5,7 @@ import stubs.wallet_pb2_grpc as wallet_pb2_grpc
 
 class Wallet:
   def Balance(identifier):
+    print(identifier)
     return {
       "balance": -1
     }

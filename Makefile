@@ -40,4 +40,4 @@ run_serv_banco:
 run_cli_banco:
 	make clean > /dev/null
 	make stubs > /dev/null
-	python3 wallet-client/src/main.py
+	python3 wallet-client/src/main.py $(arg1) $(arg2)

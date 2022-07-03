@@ -8,12 +8,6 @@ class Wallet:
     self.accounts = {}
     self.__load_accounts()
 
-  def __load_accounts(self):
-    file = open("contas.txt")
-    for line in file:
-      data = line.split(" ")
-      self.accounts[data[0]] = int(data[1])
-
   def Balance(self, identifier):
     if not identifier in self.accounts:
       return {
@@ -25,7 +19,24 @@ class Wallet:
     }
   
   def Stop(self):
-    server.stop(0)
+    self.__save_accounts()
+    server.stop(10)
+    return {
+      "accounts": len(self.accounts)
+    }
+
+  def __load_accounts(self):
+    file = open("contas.txt")
+    for line in file:
+      if line == "":
+        continue
+      data = line.split(" ")
+      self.accounts[data[0]] = int(data[1])
+  
+  def __save_accounts(self):
+    file = open("contas.txt", "w")
+    for account in self.accounts:
+      file.write(f"{account} {self.accounts[account]}\n")
 
 server = GRPCServer()
 server.register(Wallet, wallet_pb2, wallet_pb2_grpc)

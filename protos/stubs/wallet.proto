@@ -14,4 +14,6 @@ message BalanceReply {
 }
 
 message StopParams {}
-message StopReply {}
+message StopReply {
+  int64 accounts = 1;
+}

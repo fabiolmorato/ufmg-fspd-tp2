@@ -1,5 +1,5 @@
 __pycache__
-*/**/stubs
-!protos/stubs
+**/stubs
 */**/common
 stubs
+!protos/stubs

@@ -33,7 +33,11 @@ clean:
 	rm -rf ./store-client/common
 
 run_serv_banco:
+	make clean > /dev/null
+	make stubs > /dev/null
 	python3 wallet-server/src/main.py
 
 run_cli_banco:
+	make clean > /dev/null
+	make stubs > /dev/null
 	python3 wallet-client/src/main.py

@@ -41,3 +41,13 @@ run_cli_banco:
 	make clean > /dev/null
 	make stubs > /dev/null
 	python3 wallet-client/src/main.py $(arg1) $(arg2)
+
+run_serv_loja:
+	make clean > /dev/null
+	make stubs > /dev/null
+	python3 store-server/src/main.py $(arg1) $(arg2) $(arg3) $(arg4)
+
+run_cli_loja:
+	make clean > /dev/null
+	make stubs > /dev/null
+	python3 store-client/src/main.py $(arg1) $(arg2) $(arg3)

@@ -6,7 +6,7 @@ import stubs.wallet_pb2 as wallet_pb2
 import stubs.wallet_pb2_grpc as wallet_pb2_grpc
 
 def main(argv):
-  identifier = argv[1]
+  user_account = argv[1]
   server = argv[2]
 
   address = server.split(":")[0]
@@ -24,12 +24,12 @@ def main(argv):
     command = parts[0]
 
     if command == "S":
-      balance = Wallet.Balance(identifier=identifier).balance
+      balance = Wallet.Balance(identifier=user_account).balance
       print(balance)
 
     elif command == "O":
       value = int(parts[1])
-      payment_order = Wallet.PaymentOrder(identifier=identifier, value=value)
+      payment_order = Wallet.PaymentOrder(identifier=user_account, value=value)
       if payment_order.status < 0:
         print(payment_order.status)
         continue
@@ -37,7 +37,7 @@ def main(argv):
       print(payment_order_id)
       payment_order_id += 1
 
-    elif command == "T":
+    elif command == "X":
       value = int(parts[1])
       payment_order = int(parts[2])
       account = parts[3]
@@ -49,7 +49,8 @@ def main(argv):
       identifier = payment_orders[payment_order]
       result = Wallet.Transfer(value=value, identifier=identifier, account=account).result
       print(result)
-      del payment_orders[payment_order]
+      if result > 0:
+        del payment_orders[payment_order]
 
     elif command == "F":
       accounts_saved = Wallet.Stop().accounts

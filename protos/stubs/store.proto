@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+service Store {
+  rpc Price (PriceParams) returns (PriceReply) {}
+  rpc Purchase (PurchaseParams) returns (PurchaseReply) {}
+  rpc Finish (FinishParams) returns (FinishReply) {}
+}
+
+message PriceParams {}
+
+message PriceReply {
+  int64 price = 1;
+}
+
+message PurchaseParams {
+  bytes payment_order = 1;
+}
+
+message PurchaseReply {
+  int64 value = 1;
+}
+
+message FinishParams {}
+
+message FinishReply {
+  int64 balance = 1;
+}
